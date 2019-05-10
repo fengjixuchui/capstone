@@ -650,14 +650,14 @@ static bool is_indexed09_post_byte_valid(const m680x_info *info,
 	case 0x9D: // [n16,PCR]
 		insn_description->insn_size += 2;
 		retval = read_byte(info, &ir, *address + 1);
-		address += 2;
+		*address += 2;
 		return retval;
 
 	case 0x9F: // [n]
 		insn_description->insn_size += 2;
 		retval = (post_byte & 0x60) == 0 &&
 			read_byte(info, &ir, *address + 1);
-		address += 2;
+		*address += 2;
 		return retval;
 	}
 
@@ -1709,7 +1709,7 @@ static void ext_idx12_x_hdlr(MCInst *MI, m680x_info *info, uint16_t *address)
 	indexed12_hdlr(MI, info, address);
 	read_word(info, &imm16, *address);
 	op0->type = M680X_OP_EXTENDED;
-	op0->imm = (int16_t)imm16;
+	op0->ext.address = (int16_t)imm16;
 	set_operand_size(info, op0, 1);
 }
 
